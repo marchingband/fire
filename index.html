@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html onmousemove="mm(event)">
+  <body></body>
+<script>
+  tick=()=>{
+    let divs = Array.from(document.getElementsByTagName('div'))
+    divs.forEach((div)=>{
+      if(parseInt(div.style.top)<50 || parseInt(div.style.top) > (window.innerHeight-50)){
+        return
+      }
+      if(parseInt(div.style.left)<50 || parseInt(div.style.left) > (window.innerWidth-50)){
+        return
+      }
+      let xD = 1
+      let yD = 1
+      switch (div.dataDir){
+        case 0 : break;
+        case 1 : xD = -1 ; break;
+        case 2 : yD = -1 ; break;
+        case 3 : xD = -1 ; yD = -1; break;
+        case 4 : xD = -1 ; yD = 0 ; break;
+        case 5 : yD = 0 ; break;
+        case 6 : xD = 0  ; yD = -1; break;
+        case 7 : xD = 0  ; break;
+        default : break;
+      }
+      div.style.top  = (parseInt(div.style.top)  + yD*speed) + 'px'
+      div.style.left = (parseInt(div.style.left) + xD*speed) + 'px'
+    }) 
+    window.requestAnimationFrame(tick)
+  }
+  window.requestAnimationFrame(tick)
+  
+  const b = document.querySelector('body')
+  const hugeBox = 'height:20px;width:20px;position:absolute'
+  const bigBox = 'height:10px;width:10px;position:absolute'
+  const box = 'height:2px;width:2px;position:absolute'
+  const speed = 3
+  mm=(e)=>{
+    for (let i = 0;i<8;i++){
+    let d = document.createElement('div')
+    d.style.cssText = box
+    d.style.top  = e.clientY + 'px'
+    d.style.left = e.clientX + 'px'
+    d.style.background = nextColor()
+    d.dataDir = nextDir()
+    b.appendChild(d)
+    let divs = Array.from(document.getElementsByTagName('div'))
+    if (divs.length>300){
+      for (let i=0;i<8;i++){
+        b.removeChild(divs[i])
+      }
+    }
+  }}
+  window.onclick=(e)=>{
+    for (let i = 0;i<8;i++){
+    let d = document.createElement('div')
+    d.style.cssText = bigBox
+    d.style.top  = e.clientY + 'px'
+    d.style.left = e.clientX + 'px'
+    d.style.background = nextColor()
+    d.style.borderRadius = '5px'
+    d.dataDir = nextDir()
+    b.appendChild(d)
+    let divs = Array.from(document.getElementsByTagName('div'))
+    if (divs.length>300){
+      for (let i=0;i<8;i++){
+        b.removeChild(divs[i])
+      }
+    }
+  }}
+  window.ondblclick=(e)=>{
+    for (let i = 0;i<8;i++){
+    let d = document.createElement('div')
+    d.style.cssText = hugeBox
+    d.style.top  = e.clientY + 'px'
+    d.style.left = e.clientX + 'px'
+    d.style.background = nextColor()
+    d.style.borderRadius = '10px'
+    d.dataDir = nextDir()
+    b.appendChild(d)
+    let divs = Array.from(document.getElementsByTagName('div'))
+    if (divs.length>300){
+      for (let i=0;i<8;i++){
+        b.removeChild(divs[i])
+      }
+    }
+  }}
+  const colors = ['black','red', 'yellow', 'blue', 'green', 'orange', 'purple', 'brown', 'pink']
+  var color  = 0
+  nextColor=()=>{
+    if(color<colors.length-1){
+      color++
+    } else {
+      color = 0
+    }
+    return colors[color]
+  }
+  var dir = 0
+  nextDir=()=>{
+    dir = dir<7?dir+1:0
+    return dir 
+  }
+  </script>
+</html>
